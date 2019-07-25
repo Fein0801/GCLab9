@@ -92,8 +92,8 @@ public class Lab9 {
     }
 
     private static void addItemtoOrder(int i) {
-	int tempQty = qty.get(i);
 	String item = items.get(i);
+	int tempQty = qtyMap.get(item);
 	qtyMap.put(item, ++tempQty);
 	qty.add(i, tempQty);
 	System.out.printf("You ordered %d of %s at %s each.\n", tempQty, item, formatPrice(priceMap.get(item)));
@@ -111,9 +111,9 @@ public class Lab9 {
 	double price;
 	for (String item : itemNames) {
 	    price = getRandomPrice(5);
-	    while (prices.contains(price)) { // if prices already has this price (very unlikely), reroll until a new
+	    while (prices.contains(price)) { // if prices already has this price (very unlikely), reroll until a new //
 					     // price is created
-		price = getRandomPrice(5);
+		price = roundToTwoPlaces(getRandomPrice(5));
 	    }
 	    priceMap.put(item, price);
 	    qtyMap.put(item, 0);
@@ -128,7 +128,7 @@ public class Lab9 {
     }
 
     private static void printMenu() {
-	// yes, I could have used the method call in the sysout
+	System.out.println();
 	String firstLine = formatOutput("Item", "Price");
 	System.out.println(getDivLine(firstLine));
 	System.out.println(firstLine);
@@ -182,5 +182,13 @@ public class Lab9 {
 	    }
 	}
 	return lowestPrice;
+    }
+
+    // This method doesn't quite work because double precision is wonky
+    private static double roundToTwoPlaces(double d) {
+	double dTimes100 = d * 100;
+	dTimes100 = Math.floor(dTimes100);
+	d = dTimes100 / 100.0;
+	return d;
     }
 }
